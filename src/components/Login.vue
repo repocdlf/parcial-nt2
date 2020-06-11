@@ -1,7 +1,7 @@
 <template>
 
   <section class="src-components-login">
-    <h1>src-components-login Component</h1>
+    <h1>LOGIN</h1>
   </section>
 
 </template>
