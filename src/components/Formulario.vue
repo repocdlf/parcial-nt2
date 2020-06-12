@@ -74,20 +74,51 @@
       </validate>
       <br>
 
-      <button class="btn btn-success my-4" :disabled="formState.$invalid || enviando" type="submit">Enviar</button>
+      <button class="btn btn-success my-4" :disabled="formState.$invalid" type="submit">Enviar</button>
       <button class="btn btn-primary mr-2" @click="logout()">Logout</button>
 
     </vue-form>
 
-    <!-- <pre>{{formState}}</pre> -->
-
   </div>
+
+
+
+
+    <div class="jumbotron mt-3">
+      <h2>Tareas</h2>
+      <hr>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">DESCRIPCION</th>
+            <th scope="col">NOMBRE</th>
+            <th scope="col">EMAIL</th>
+            <th scope="col">CREADA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(tarea, index) in tareas" :key="index">
+            <td>{{ tarea.descripcion }}</td>
+            <td>{{ tarea.nombre }}</td>
+            <td>{{ tarea.email }}</td>
+            <td>{{ tarea.createdAt }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+
+    <div class="jumbotron mt-3">
+      <pre></pre>
+    </div>
+
   </section>
 
 </template>
 
 <script lang="js">
-  import { urlPosts } from '../urls'
+  import { urlMockapiio } from '../urls'
   export default {
     name: 'src-components-formulario',
     components: {},
@@ -96,9 +127,9 @@
       return {
         formState : {},
         formData : this.getInitialData(),
-        enviando: false,
         nombreChrMin: 5,
-        nombreChrMax: 15
+        nombreChrMax: 15,
+        tareas : []
       }
     },
     computed: {
@@ -117,28 +148,20 @@
         }
       },
       enviar() {
-        this.enviando = true
-        console.log(this.formData)
-
-        /* ------------------------ */
-        /* ENVIO DE DATOS CON AXIOS */
-        /* ------------------------ */
-        this.axios.post(urlPosts, this.formData, {
+        this.axios.post(urlMockapiio, this.formData, {
           'content-type' : 'application/json'
         })
         .then( res => {
           console.log(res.data)
           this.formData = this.getInitialData()
           this.formState._reset()
-          this.enviando = false
         })
         .catch(error => {
           console.log('ERROR POST', error)
-          this.enviando = false
         })
 
         setTimeout(() => {
-          this.enviando = false
+          this.getTareas()
         },10000)
       },
       logout() {
@@ -147,6 +170,16 @@
           name: 'login',
           params: {},
           query: {}
+        })
+      },
+      getTareas() {
+        this.axios(urlMockapiio)
+        .then( res => {
+          console.log(res.data)
+          this.tareas = res.data
+        })
+        .catch(error => {
+          console.log('ERROR GET HTTP', error)
         })
       }
     }
