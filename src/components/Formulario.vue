@@ -110,7 +110,7 @@
 
 
     <div class="jumbotron mt-3">
-      <pre></pre>
+      <p>1-d, 2-c, 3-c, 4-b, 5-a, 6-b, 7-d, 8-d, 9-d, 10-d</p>
     </div>
 
   </section>
